@@ -6,6 +6,9 @@ namespace KennysCuts.Context
 {
     public class DatabaseContext : IdentityDbContext<User>
     {
+        public DbSet<Services> Services { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Barber> Barbers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
         {
             var folder = Environment.SpecialFolder.MyDocuments;
