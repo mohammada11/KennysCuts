@@ -72,9 +72,9 @@ namespace KennysCuts.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Description = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<int>(type: "INTEGER", nullable: false),
-                    Duration = table.Column<int>(type: "INTEGER", nullable: false)
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<string>(type: "TEXT", nullable: false),
+                    Duration = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

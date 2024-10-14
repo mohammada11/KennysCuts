@@ -73,14 +73,17 @@ namespace KennysCuts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Description")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

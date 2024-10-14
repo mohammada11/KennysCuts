@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KennysCuts.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241010133542_InitialCreate")]
+    [Migration("20241014093533_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -76,14 +76,17 @@ namespace KennysCuts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Description")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
