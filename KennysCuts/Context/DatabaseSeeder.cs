@@ -29,13 +29,14 @@ namespace KennysCuts.Context
                 await _context!.SaveChangesAsync();
             }
 
+
             if (!_context.Users.Any())
             {
                 await _roleManager.CreateAsync(new IdentityRole("Admin"));
                 await _roleManager.CreateAsync(new IdentityRole("Customers"));
 
                 var adminEmail = "admin@barbers.com";
-                var adminPassword = "KennyTheBarber";
+                var adminPassword = "KennyTheBarber123!";
 
                 var admin = new User
                 {
@@ -46,7 +47,7 @@ namespace KennysCuts.Context
                 };
 
                 await _userManager.CreateAsync(admin, adminPassword);
-                await _userManager.AddToRoleAsync(admin, "Admin");
+               await _userManager.AddToRoleAsync(admin, "Admin");
 
             }
 
@@ -67,5 +68,7 @@ namespace KennysCuts.Context
             new Services { Id = 9, Description = "Haircut with Beard Trim", Price = 25, Duration = 55 }
             ];
         }
+
+
     }
 }

@@ -193,7 +193,7 @@ namespace KennysCuts.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
                     ServicesId = table.Column<int>(type: "INTEGER", nullable: false),
                     BarberId = table.Column<int>(type: "INTEGER", nullable: false),
                     Timeslot = table.Column<string>(type: "TEXT", nullable: false)
@@ -205,8 +205,7 @@ namespace KennysCuts.Migrations
                         name: "FK_Bookings_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bookings_Barbers_BarberId",
                         column: x => x.BarberId,
