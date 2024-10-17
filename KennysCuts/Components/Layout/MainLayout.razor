@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
     <div class="container">
         <a class="navbar-brand" href="/">Kenny's Cuts</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,15 +52,15 @@
                         </AuthorizeView>
                         <li class="navbar-text me-1"> @context.User.Identity?.Name </li>
                         <li class="nav-item me-1">
-                            <NavLink class="btn btn-outline-dark" href="/Account/Logout" Match="NavLinkMatch.All">Logout</NavLink>
+                            <NavLink class="btn btn-outline-warning" href="/Account/Logout" Match="NavLinkMatch.All">Logout</NavLink>
                         </li>
                     </Authorized>
                     <NotAuthorized>
                         <li class="nav-item me-1">
-                            <NavLink class="btn btn-outline-dark" href="/Account/Login" Match="NavLinkMatch.Prefix">Login</NavLink>
+                            <NavLink class="btn btn-outline-warning" href="/Account/Login" Match="NavLinkMatch.Prefix">Login</NavLink>
                         </li>
                         <li class="nav-item me-1 mt-md-0">
-                            <NavLink class="btn btn-outline-dark" href="/Account/Register" Match="NavLinkMatch.Prefix">Register</NavLink>
+                            <NavLink class="btn btn-outline-warning" href="/Account/Register" Match="NavLinkMatch.Prefix">Register</NavLink>
                         </li>
                     </NotAuthorized>
                 </AuthorizeView>

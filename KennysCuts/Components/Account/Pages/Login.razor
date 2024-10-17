@@ -13,30 +13,32 @@
 <PageTitle>Log in</PageTitle>
 <StatusMessage Message="@statusMessage" IsError="@isError" />
 
-<div class="card">
-    <div class="card-body bg-light">
-        <h4 class="card-title">Login</h4>
-        <EditForm OnValidSubmit="LoginUser" Model="Model" FormName="loginForm">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
-                    <InputText @bind-Value="Model.Email" class="form-control" placeholder="name@example.com" />
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card text-bg-dark mb-3" style="width: 400px;">
+        <div class="card-body">
+            <h4 class="card-title text-center">Login</h4>
+            <EditForm OnValidSubmit="LoginUser" Model="Model" FormName="loginForm">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label for="email" class="form-label">Email</label>
+                        <InputText @bind-Value="Model.Email" class="form-control" placeholder="name@example.com" />
+                    </div>
+                    <div class="col-md-12">
+                        <label for="password" class="form-label">Password</label>
+                        <InputText type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-warning w-100">Login</button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="@(NavigationManager.ToAbsoluteUri("Account/Register"))" class="btn btn-warning w-100">Register</a>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="password" class="form-label">Password</label>
-                    <InputText type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
-
-                </div>
-                <div class="col-md-2">
-                    <a href="@(NavigationManager.ToAbsoluteUri("Account/Register"))" class="btn btn-success w-100">Register</a>
-                </div>
-            </div>
-        </EditForm>
+            </EditForm>
+        </div>
     </div>
 </div>
+
 
 @code {
     private string? statusMessage;

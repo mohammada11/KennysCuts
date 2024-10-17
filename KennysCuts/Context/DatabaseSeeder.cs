@@ -36,7 +36,7 @@ namespace KennysCuts.Context
                 await _roleManager.CreateAsync(new IdentityRole("Customers"));
 
                 var adminEmail = "admin@barbers.com";
-                var adminPassword = "KennyTheBarber123!";
+                var adminPassword = "Kenny11!";
 
                 var admin = new User
                 {
