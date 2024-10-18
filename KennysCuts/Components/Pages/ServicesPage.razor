@@ -1,0 +1,28 @@
+﻿@using KennysCuts.Context
+@using KennysCuts.Model
+@page "/servicespage"
+@inject ServiceProvider ServiceProvider
+@inject NavigationManager NavigationManager
+
+<h3>ServicesPage</h3>
+
+<div class="row">
+ @foreach (var services in services)
+    {
+    <div class="col-md-3">
+        <ServiceItem Service="service"/> 
+    </div>
+}
+</div>
+
+
+@code {
+    private IEnumerable<Services> services;
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+
+    }
+
+}
