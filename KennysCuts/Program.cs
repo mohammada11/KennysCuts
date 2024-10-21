@@ -1,4 +1,4 @@
-using KennyCuts.Components.Account;
+using KennysCuts.Components.Account;
 using KennysCuts.Components;
 using KennysCuts.Components.Account;
 using KennysCuts.Context;
@@ -25,8 +25,17 @@ builder.Services.AddAuthentication(options =>
 })
 .AddIdentityCookies();
 
+
+
+
+
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddScoped<ServiceProvider>();
+builder.Services.AddScoped<ServicesProvider>();
+
+
+
+
+
 
 builder.Services.AddIdentityCore<User>()
     .AddRoles<IdentityRole>()

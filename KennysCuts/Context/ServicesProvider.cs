@@ -2,20 +2,20 @@
 using KennysCuts.Context;
 using KennysCuts.Model;
 
-namespace KennyCuts.Context
+namespace KennysCuts.Context
 {
-    public class ServiceProvider
+    public class ServicesProvider
     {
         private readonly DatabaseContext _context;
 
-        public ServiceProvider(DatabaseContext context)
+        public ServicesProvider(DatabaseContext context)
         {
             _context = context;
         }
 
         public async Task<List<Services>> GetAllServicesAsync()
         {
-            return await _context.Services.OrderBy(service => service.Id).ToListAsync();
+            return await _context.Services.ToListAsync();
         }
 
         public Services? GetServices(int id)

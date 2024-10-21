@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace KennyCuts.Components.Account
+namespace KennysCuts.Components.Account
 {
     public static class AccountRouteExtensions
     {
