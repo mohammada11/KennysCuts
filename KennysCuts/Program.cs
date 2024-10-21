@@ -30,7 +30,7 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddScoped<ServicesProvider>();
+builder.Services.AddScoped<HaircutsProvider>();
 
 
 

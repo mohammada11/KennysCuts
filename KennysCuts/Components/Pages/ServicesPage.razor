@@ -1,12 +1,26 @@
-﻿@using KennysCuts.Context
+﻿@using KennysCuts.Components.Shared
+@using KennysCuts.Context
 @using KennysCuts.Model
 @page "/servicespage"
-@inject ServicesProvider ServiceProvider
+@inject HaircutsProvider HaircutsProvider
 @inject NavigationManager NavigationManager
 
-<h3>ServicesPage</h3>
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h3>Services</h3>
+        </div>
+    </div>
+</div>
 
-
+<div class="row">
+@foreach (var services in services)
+{
+    <div class="col-md-3">
+        <HaircutDetails Services="services"/> 
+    </div>
+}
+</div>
 
 
 @code {
@@ -15,7 +29,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        services = await ServiceProvider.GetAllServicesAsync();
+        services = await HaircutsProvider.GetAllServicesAsync();
     }
 
 }

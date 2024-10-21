@@ -4,11 +4,11 @@ using KennysCuts.Model;
 
 namespace KennysCuts.Context
 {
-    public class ServicesProvider
+    public class HaircutsProvider
     {
         private readonly DatabaseContext _context;
 
-        public ServicesProvider(DatabaseContext context)
+        public HaircutsProvider(DatabaseContext context)
         {
             _context = context;
         }
