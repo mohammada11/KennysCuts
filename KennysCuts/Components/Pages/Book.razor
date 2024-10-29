@@ -3,50 +3,108 @@
 @using KennysCuts.Context
 @inject DatabaseContext DatabaseContext
 @inject NavigationManager NavigationManager
+@inject HaircutsProvider HaircutsProvider
 
 <h3>Book</h3>
 
 
 
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-7">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h4 class="card-title text-center">Book Now</h4>
-                        <div class="form-group mb-3 text-center">
-                            <label>Card Name</label>
-                            <InputText class="form-control text-center" placeholder="Enter Name" />
-                        </div>
-                        <div class="form-group mb-3 text-center">
-                            <label>Card Number</label>
-                            <InputText class="form-control text-center" placeholder="Select a service" />
-                        </div>
-                        <div class="form-group mb-3 text-center">
-                            <label>Expiry Date</label>
-                            <InputText class="form-control text-center" placeholder="Select a barber" />
-                        </div>
-                        <div class="form-group mb-3 text-center">
-                            <label>Security Code</label>
-                            <InputText class="form-control text-center" placeholder="Choose a timeslot" />
-                        </div>
-                        <div>
-                            <button type="submit" class="btn btn-warning d-flex">
-                           
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- Adjusts for 3 columns on medium and up -->
+        <div class="col">
+            <div class="card h-100">
+                <!-- Ensures the card height is consistent -->
+                <div class="card-body">
+                    <h5 class="card-title">Select Time</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Button</a>
+                </div>
+            </div>
+        </div>
+        <!-- Repeat the above div with class "col" for more cards -->
+        <div class="col">
+            <div class="card h-100 text-center">
+                <!-- Center-aligns all text in the card -->
+                <div class="card-body">
+                    <h5 class="card-title">Select Service & Barber</h5>
 
-                            </button>
-                        </div>
+                    <!-- Select Barber Section -->
+                    <p class="card-text mb-4">
+                        <!-- Adds margin below the paragraph for spacing -->
+                        Choose from our professional line of barbers ready to cater to your needs for the haircut you desire.
+                    </p>
+
+                    <div class="form-check form-check-inline mb-3">
+                        <!-- Adds bottom margin for spacing -->
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <label class="form-check-label" for="inlineCheckbox1">Kenny</label>
                     </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                        <label class="form-check-label" for="inlineCheckbox2">George</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+                        <label class="form-check-label" for="inlineCheckbox3">Jimmy</label>
+                    </div>
+
+                    <!-- Select Services Section -->
+                    <p class="card-text mt-4 mb-2">
+                        <!-- Adds top and bottom margin for spacing -->
+                        Choose from our wide range of haircuts.
+                    </p>
+                    <select class="form-select mb-4" aria-label="Service select">
+                        <!-- Adds bottom margin -->
+                        <option selected>Open this select menu</option>
+                        @foreach (var service in services)
+                        {
+                            <option value="@service.Id">@service.Name</option>
+                        }
+                    </select>
+
+                    <p class="card-text mt-4 mb-3">
+                        <!-- Adds margin above and below for spacing -->
+                        Want more details about our services? Use the button below to go to our Services page.
+                    </p>
+
+                    <!-- Navigation to Services Page -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <!-- Centers the breadcrumb -->
+                            <li class="breadcrumb-item">
+                                <a href="/servicespage">Services</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Add additional cards as needed -->
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Summary</h5>
+                    <p class="card-text"></p>
+                    <a href="#" class="btn btn-primary">Another Button</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
 
 
 @code {
     
+    private List<Services> services;
+
+    protected override async Task OnInitializedAsync()
+    {
+        services = await HaircutsProvider.GetAllServicesAsync();
+    }
+
 }
 
 
