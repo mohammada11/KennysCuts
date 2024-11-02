@@ -5,6 +5,7 @@ using KennysCuts.Context;
 using KennysCuts.Model;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using KennysCuts;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,8 +32,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<HaircutsProvider>();
-
-
+builder.Services.AddScoped<TimeslotProvider>();
+builder.Services.AddScoped<BarberProvider>();
 
 
 

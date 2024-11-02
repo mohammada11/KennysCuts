@@ -8,7 +8,7 @@ namespace KennysCuts.Context
     {
         public DbSet<Services> Services { get; set; }
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Barber> Barbers { get; set; }
+        public DbSet<Barber> Barber { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
         {
             var folder = Environment.SpecialFolder.MyDocuments;

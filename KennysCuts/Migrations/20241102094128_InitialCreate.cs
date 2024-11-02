@@ -53,7 +53,7 @@ namespace KennysCuts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Barbers",
+                name: "Barber",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -63,7 +63,7 @@ namespace KennysCuts.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Barbers", x => x.Id);
+                    table.PrimaryKey("PK_Barber", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,7 +197,9 @@ namespace KennysCuts.Migrations
                     UserId = table.Column<string>(type: "TEXT", nullable: true),
                     ServicesId = table.Column<int>(type: "INTEGER", nullable: false),
                     BarberId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Timeslot = table.Column<string>(type: "TEXT", nullable: false)
+                    Timeslot = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    SelectedBarberId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SelectedServiceId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,9 +210,21 @@ namespace KennysCuts.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Bookings_Barbers_BarberId",
+                        name: "FK_Bookings_Barber_BarberId",
                         column: x => x.BarberId,
-                        principalTable: "Barbers",
+                        principalTable: "Barber",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Barber_SelectedBarberId",
+                        column: x => x.SelectedBarberId,
+                        principalTable: "Barber",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Services_SelectedServiceId",
+                        column: x => x.SelectedServiceId,
+                        principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -264,6 +278,16 @@ namespace KennysCuts.Migrations
                 column: "BarberId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bookings_SelectedBarberId",
+                table: "Bookings",
+                column: "SelectedBarberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_SelectedServiceId",
+                table: "Bookings",
+                column: "SelectedServiceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bookings_ServicesId",
                 table: "Bookings",
                 column: "ServicesId");
@@ -302,7 +326,7 @@ namespace KennysCuts.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Barbers");
+                name: "Barber");
 
             migrationBuilder.DropTable(
                 name: "Services");

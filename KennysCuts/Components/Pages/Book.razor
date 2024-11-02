@@ -1,77 +1,91 @@
 ﻿@page "/book"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using KennysCuts.Model
 @using KennysCuts.Context
+@using System.ComponentModel.DataAnnotations
 @inject DatabaseContext DatabaseContext
 @inject NavigationManager NavigationManager
 @inject HaircutsProvider HaircutsProvider
+@inject TimeslotProvider TimeslotProvider
+@inject BarberProvider BarberProvider
 
-<h3>Book</h3>
+<h3 class="text-center my-4">Book Now 📝</h3>
 
 
 
-<div class="container">
+<div class="container my-4">
+    <!-- Responsive row layout with 1 column on extra-small screens, 3 columns on medium screens and up -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- Adjusts for 3 columns on medium and up -->
+
+        <!-- First Card: Select Time -->
         <div class="col">
             <div class="card h-100">
-                <!-- Ensures the card height is consistent -->
                 <div class="card-body">
-                    <h5 class="card-title">Select Time</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Button</a>
+                    <h5 class="card-title text-center">Select Time</h5>
+                    <div class="row">
+                        <p class="card-text mb-3">
+                            Please select a timeslot for your booking, this can always be changed later if you like.
+                        </p>
+                        <EditForm Model="@newBooking" OnValidSubmit="CheckAndBook">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <div class="mb-3">
+                                <label>Timeslot:</label>
+                                <InputDate @bind-Value="newBooking.Timeslot" class="form-control" />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Book Timeslot</button>
+                        </EditForm>
+
+                        @if (message != null)
+                        {
+                            <p class="text-center mt-3">@message</p>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Repeat the above div with class "col" for more cards -->
+
+        <!-- Second Card: Select Service & Barber -->
         <div class="col">
             <div class="card h-100 text-center">
-                <!-- Center-aligns all text in the card -->
                 <div class="card-body">
                     <h5 class="card-title">Select Service & Barber</h5>
 
+                    <p class="card-text mb-3">
+                        Choose from our professional line of barbers.
+                    </p>
+
                     <!-- Select Barber Section -->
-                    <p class="card-text mb-4">
-                        <!-- Adds margin below the paragraph for spacing -->
-                        Choose from our professional line of barbers ready to cater to your needs for the haircut you desire.
-                    </p>
-
-                    <div class="form-check form-check-inline mb-3">
-                        <!-- Adds bottom margin for spacing -->
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label" for="inlineCheckbox1">Kenny</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                        <label class="form-check-label" for="inlineCheckbox2">George</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                        <label class="form-check-label" for="inlineCheckbox3">Jimmy</label>
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                            <label class="form-check-label" for="inlineCheckbox1">Kenny</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                            <label class="form-check-label" for="inlineCheckbox2">George</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+                            <label class="form-check-label" for="inlineCheckbox3">Jimmy</label>
+                        </div>
                     </div>
 
-                    <!-- Select Services Section -->
-                    <p class="card-text mt-4 mb-2">
-                        <!-- Adds top and bottom margin for spacing -->
-                        Choose from our wide range of haircuts.
-                    </p>
+                    <!-- Select Service Section -->
+                    <p class="card-text mb-2">Choose from our range of haircuts.</p>
                     <select class="form-select mb-4" aria-label="Service select">
-                        <!-- Adds bottom margin -->
-                        <option selected>Open this select menu</option>
+                        <option selected>Choose a service</option>
                         @foreach (var service in services)
                         {
                             <option value="@service.Id">@service.Name</option>
                         }
                     </select>
 
-                    <p class="card-text mt-4 mb-3">
-                        <!-- Adds margin above and below for spacing -->
-                        Want more details about our services? Use the button below to go to our Services page.
-                    </p>
+                    <p class="card-text mt-4 mb-3">Learn more on our Services page.</p>
 
-                    <!-- Navigation to Services Page -->
+                    <!-- Link to Services Page -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
-                            <!-- Centers the breadcrumb -->
                             <li class="breadcrumb-item">
                                 <a href="/servicespage">Services</a>
                             </li>
@@ -80,30 +94,62 @@
                 </div>
             </div>
         </div>
-        <!-- Add additional cards as needed -->
+
+        <!-- Third Card: Summary -->
         <div class="col">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Summary</h5>
-                    <p class="card-text"></p>
-                    <a href="#" class="btn btn-primary">Another Button</a>
+                    <h5 class="card-title text-center">Summary</h5>
+                    <p class="card-text">
+                        Review your selections and confirm your appointment details here.
+                    </p>
+                    <!-- Additional summary content goes here -->
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
 
 
 
+
+
+
 @code {
-    
+
     private List<Services> services;
+    private List<Barber> barbers;
 
     protected override async Task OnInitializedAsync()
     {
         services = await HaircutsProvider.GetAllServicesAsync();
+        barbers = await BarberProvider.GetAllBarberAsync();
+
     }
+
+    private Booking newBooking = new Booking();
+    private string message;
+
+    private async Task CheckAndBook()
+    {
+        if (await TimeslotProvider.IsTimeslotAvailableAsync(newBooking.Timeslot))
+        {
+            await TimeslotProvider.AddBookingAsync(newBooking);
+            message = "Booking successful!";
+        }
+        else
+        {
+            message = "Timeslot is already taken. Please select a different time.";
+        }
+    }
+
+
+
+
+
+
 
 }
 

@@ -71,6 +71,15 @@ namespace KennysCuts.Context
             ];
         }
 
+        private List<Barber> GetBarbers()
+        {
+            return
+            [
+                new Barber {Id = 1, Name = "Kenny", Availability = "Yes"},
+                new Barber {Id = 2, Name = "George", Availability = "Yes"},
+                new Barber {Id = 3, Name = "Jimmy", Availability = "Yes"},
 
+            ];
+        }
     }
 }
