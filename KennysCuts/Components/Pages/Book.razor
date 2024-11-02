@@ -9,17 +9,16 @@
 @inject TimeslotProvider TimeslotProvider
 @inject BarberProvider BarberProvider
 
-<h3 class="text-center my-4">Book Now 📝</h3>
+<h3 class="text-center my-4">Book Now</h3>
 
 
 
 <div class="container my-4">
-    <!-- Responsive row layout with 1 column on extra-small screens, 3 columns on medium screens and up -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
 
-        <!-- First Card: Select Time -->
+        <!-- Select Time Card -->
         <div class="col">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title text-center">Select Time</h5>
                     <div class="row">
@@ -45,9 +44,9 @@
             </div>
         </div>
 
-        <!-- Second Card: Select Service & Barber -->
+        <!-- Select Service & Barber Card -->
         <div class="col">
-            <div class="card h-100 text-center">
+            <div class="card h-100 text-center shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Select Service & Barber</h5>
 
@@ -57,27 +56,25 @@
 
                     <!-- Select Barber Section -->
                     <div class="d-flex justify-content-center mb-3">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">Kenny</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                            <label class="form-check-label" for="inlineCheckbox2">George</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                            <label class="form-check-label" for="inlineCheckbox3">Jimmy</label>
-                        </div>
+                        <div class="col-md-4">
+                        <label for="inputState" class="form-label">Barber</label>
+                        <select id="inputState" class="form-select" @bind="selectedBarber">
+                            <option selected>Choose barber</option>
+                            <option>Kenny</option>
+                            <option>Jimmy</option>
+                            <option>George</option>
+                        </select>
                     </div>
+                </div>
+
 
                     <!-- Select Service Section -->
                     <p class="card-text mb-2">Choose from our range of haircuts.</p>
-                    <select class="form-select mb-4" aria-label="Service select">
-                        <option selected>Choose a service</option>
+                    <select class="form-select mb-4" aria-label="Service select" @bind="selectedService">
+                        <option value="0">Choose a service</option>
                         @foreach (var service in services)
                         {
-                            <option value="@service.Id">@service.Name</option>
+                            <option value="@service.Name">@service.Name</option>
                         }
                     </select>
 
@@ -95,15 +92,17 @@
             </div>
         </div>
 
-        <!-- Third Card: Summary -->
+        <!-- Summary Card -->
         <div class="col">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title text-center">Summary</h5>
                     <p class="card-text">
                         Review your selections and confirm your appointment details here.
                     </p>
-                    <!-- Additional summary content goes here -->
+                    <li class="list-group-item">Timeslot: @newBooking.Timeslot.ToString("hh:mm tt")</li>
+                    <li class="card-text">Selected Barber: <strong>@selectedBarber</strong></li>
+                    <li class="card-text">Selected Service: <strong>@selectedService</strong></li>
                 </div>
             </div>
         </div>
@@ -119,6 +118,7 @@
 
 @code {
 
+    private Booking newBooking = new Booking();
     private List<Services> services;
     private List<Barber> barbers;
 
@@ -129,7 +129,13 @@
 
     }
 
-    private Booking newBooking = new Booking();
+    private string selectedBarber { get; set; }
+    private string selectedService { get; set; }
+
+
+
+
+
     private string message;
 
     private async Task CheckAndBook()
