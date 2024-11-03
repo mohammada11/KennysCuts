@@ -13,25 +13,35 @@
 <PageTitle>Log in</PageTitle>
 <StatusMessage Message="@statusMessage" IsError="@isError" />
 
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 50vh;">
-    <div class="card text-bg-dark mb-3" style="width: 400px;">
-        <div class="card-body">
-            <h4 class="card-title text-center">Login</h4>
+<!-- Container centered with a minimum vertical height -->
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 65vh;">
+    <!-- Dark-themed card with rounded corners, shadow, and specific width -->
+    <div class="card bg-white shadow-lg rounded-3 border-0" style="width: 400px;">
+        <div class="card-body p-4">
+            <!-- Centered title with extra bottom margin for spacing -->
+            <h4 class="card-title text-center mb-4">Login</h4>
+
             <EditForm OnValidSubmit="LoginUser" Model="Model" FormName="loginForm">
-                <div class="row g-3">
-                    <div class="col-md-12">
-                        <label for="email" class="form-label">Email</label>
-                        <InputText @bind-Value="Model.Email" class="form-control" placeholder="name@example.com" />
+                <div class="d-flex flex-column align-items-center">
+
+                    <!-- Email input field -->
+                    <div class="col-md-10 mb-3">
+                        <label for="email" class="form-label fw-bold">Email</label>
+                        <InputText @bind-Value="Model.Email" class="form-control rounded-pill px-3" placeholder="name@example.com" />
                     </div>
-                    <div class="col-md-12">
-                        <label for="password" class="form-label">Password</label>
-                        <InputText type="password" @bind-Value="Model.Password" class="form-control" placeholder="Password" />
+
+                    <!-- Password input field -->
+                    <div class="col-md-10 mb-4">
+                        <label for="password" class="form-label fw-bold">Password</label>
+                        <InputText type="password" @bind-Value="Model.Password" class="form-control rounded-pill px-3" placeholder="Password" />
                     </div>
-                    <div class="col-md-6">
-                        <button type="submit" class="btn btn-outline-light w-100">Login</button>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="@(NavigationManager.ToAbsoluteUri("Account/Register"))" class="btn btn-outline-light w-100">Register</a>
+
+                    <!-- Login button with rounded-pill styling -->
+                    <div class="col-md-10 d-flex gap-3">
+                        <button type="submit" class="btn btn-outline-dark w-50 rounded-pill fw-bold">Login</button>
+
+                        <!-- Register link styled as a button -->
+                        <a href="@(NavigationManager.ToAbsoluteUri("Account/Register"))" class="btn btn-outline-danger w-50 rounded-pill fw-bold">Register</a>
                     </div>
                 </div>
             </EditForm>
