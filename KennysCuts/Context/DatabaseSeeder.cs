@@ -29,6 +29,13 @@ namespace KennysCuts.Context
                 await _context!.SaveChangesAsync();
             }
 
+            if (!_context.Barber.Any())
+            {
+                var barber = GetBarber();
+                _context.Barber.AddRange(barber);
+                await _context!.SaveChangesAsync();
+            }
+
 
             if (!_context.Users.Any())
             {
@@ -71,7 +78,7 @@ namespace KennysCuts.Context
             ];
         }
 
-        private List<Barber> GetBarbers()
+        private List<Barber> GetBarber()
         {
             return
             [
