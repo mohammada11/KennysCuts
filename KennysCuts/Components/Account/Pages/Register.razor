@@ -15,38 +15,58 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Register</PageTitle>
-<StatusMessage Message="@statusMessage" IsError="@isError" />
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card w-50 shadow-lg rounded-3 border-0">
         <div class="card-body p-4 bg-white">
             <h4 class="card-title text-center mb-4">Register</h4>
+            <!-- EditForm component for managing form data and submission handling -->
             <EditForm OnValidSubmit="RegisterUser" Model="Model" FormName="registerForm">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
                 <div class="d-flex flex-column align-items-center">
+                    <!-- Input field for 'Name'-->
                     <div class="col-md-10 mb-3">
                         <label for="name" class="form-label fw-bold">Name</label>
                         <InputText class="form-control rounded-pill px-3" placeholder="Name" @bind-Value="Model.Name" />
-                    </div>
+                        <!-- Displays the validation message -->
+                        <ValidationMessage For="@(() => Model!.Name)" />
+                     </div>
+
+                    <!-- Input field for 'Surname' with label, input, and validation message -->
                     <div class="col-md-10 mb-3">
                         <label for="surname" class="form-label fw-bold">Surname</label>
                         <InputText class="form-control rounded-pill px-3" placeholder="Surname" @bind-Value="Model.Surname" />
+                        <ValidationMessage For="@(() => Model!.Surname)" />
                     </div>
+
+                    <!-- Input field for 'Email'-->
                     <div class="col-md-10 mb-3">
                         <label for="email" class="form-label fw-bold">Email</label>
                         <InputText id="email" class="form-control rounded-pill px-3" placeholder="Email" @bind-Value="Model.Email" />
+
+                        <!-- Displays the validation message -->
                         <div class="small">
                             <ValidationMessage For="@(() => Model!.Email)" />
                         </div>
                     </div>
+
+                    <!-- Input field for 'Password' with label, input, and validation message -->
                     <div class="col-md-10 mb-3">
                         <label for="password" class="form-label fw-bold">Password</label>
                         <InputText type="password" class="form-control rounded-pill px-3" placeholder="Password" @bind-Value="Model.Password" />
+                        <ValidationMessage For="@(() => Model!.Password)" />
                     </div>
+
+                    <!-- Input field for 'Confirm Password' with label, input, and validation message -->
                     <div class="col-md-10 mb-4">
                         <label for="confirm-password" class="form-label fw-bold">Confirm Password</label>
                         <InputText type="password" class="form-control rounded-pill px-3" placeholder="Confirm Password" @bind-Value="Model.ConfirmPassword" />
+                        <ValidationMessage For="@(() => Model!.ConfirmPassword)" />
                     </div>
+
+                    <!-- Submit button styled with red background, rounded edges, and bold font -->
                     <div class="col-md-6">
                         <button type="submit" class="btn btn-danger w-100 rounded-pill py-2 fw-bold">Register</button>
                     </div>
