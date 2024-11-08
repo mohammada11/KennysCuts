@@ -17,9 +17,11 @@
 </div>
 
 <div class="row">
+
 @foreach (var services in services)
 {
     <div class="row-md-3">
+    <!-- Takes the service object as an parameter and displays the details of the service -->
         <HaircutDetails Services="services"/> 
     </div>
 }
