@@ -15,7 +15,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-
+<StatusMessage Message="@statusMessage" IsError="@isError" />
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card w-50 shadow-lg rounded-3 border-0">
         <div class="card-body p-4 bg-white">
@@ -96,6 +96,7 @@
         // Creates the user.
         var user = new User
             {
+                UserName = Model.Email,
                 Email = Model.Email,
                 Name = Model.Name,
                 Surname = Model.Surname,
