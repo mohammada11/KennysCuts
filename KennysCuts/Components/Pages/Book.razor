@@ -36,10 +36,22 @@
                         </div>
 
                         <!-- Time Selection -->
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Time:</label>
-                            <InputText @bind-Value="selectedTime" class="form-control form-control-lg" placeholder="Enter time (e.g., 14:30)" />
-                        </div>
+                        <label class="form-label fw-semibold">Select Time:</label>
+                        <select class="form-select form-select-lg mb-4" aria-label="Time select" @bind="selectedTime">
+                            <option value="0">Choose time:</option>
+                            <option value="10:30AM">10:30AM</option>
+                            <option value="11AM">11:00AM</option>
+                            <option value="11:30AM">11:30AM</option>
+                            <option value="12:00PM">12:00PM</option>
+                            <option value="12:30PM">12:30PM</option>
+                            <option value="1:00PM">1:00PM</option>
+                            <option value="1:30PM">1:30PM</option>
+                            <option value="2:00PM">2:00PM</option>
+                            <option value="2:30PM">2:30PM</option>
+                            <option value="3:00PM">3:00PM</option>
+                            <option value="3:30PM">3:30PM</option>
+                            <option value="4:00PM">4:00PM</option>
+                        </select>
                     </EditForm>
                 </div>
             </div>

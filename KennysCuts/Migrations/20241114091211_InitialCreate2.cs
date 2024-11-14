@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KennysCuts.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreate2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -197,7 +197,7 @@ namespace KennysCuts.Migrations
                     UserId = table.Column<string>(type: "TEXT", nullable: true),
                     ServicesId = table.Column<int>(type: "INTEGER", nullable: false),
                     BarberId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Timeslot = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Timeslot = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     SelectedBarberId = table.Column<int>(type: "INTEGER", nullable: false),
                     SelectedServiceId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

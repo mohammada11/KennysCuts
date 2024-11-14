@@ -13,10 +13,7 @@ namespace KennysCuts.Context
             _context = context;
         }
 
-        public async Task<bool> IsTimeslotAvailableAsync(DateTime timeslot)
-        {
-            return !await _context.Bookings.AnyAsync(b => b.Timeslot == timeslot);
-        }
+        
 
         public async Task AddBookingAsync(Booking booking)
         {

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KennysCuts.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241108135539_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241114091211_InitialCreate2")]
+    partial class InitialCreate2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,7 @@ namespace KennysCuts.Migrations
                     b.Property<int>("ServicesId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Timeslot")
+                    b.Property<DateOnly>("Timeslot")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")

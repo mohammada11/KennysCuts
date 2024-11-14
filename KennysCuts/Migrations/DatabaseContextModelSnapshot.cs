@@ -54,7 +54,7 @@ namespace KennysCuts.Migrations
                     b.Property<int>("ServicesId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Timeslot")
+                    b.Property<DateOnly>("Timeslot")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
