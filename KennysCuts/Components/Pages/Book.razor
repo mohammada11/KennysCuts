@@ -8,9 +8,14 @@
 @inject HaircutsProvider HaircutsProvider
 @inject TimeslotProvider TimeslotProvider
 @inject BarberProvider BarberProvider
+@inject BookingProvider BookingProvider
 
 <h3 class="text-center my-4">Book Now</h3>
 
+
+<EditForm Model="@newBooking" OnValidSubmit="CheckAndBook">
+    <DataAnnotationsValidator />
+            <ValidationSummary />
 
 
 <div class="container my-5">
@@ -25,9 +30,7 @@
                         Please select a timeslot for your booking. You can change this later if needed.
                     </p>
 
-                    <EditForm Model="@newBooking" OnValidSubmit="CheckAndBook">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+                   
 
                         <!-- Date Selection -->
                         <div class="mb-3">
@@ -52,7 +55,7 @@
                             <option value="3:30PM">3:30PM</option>
                             <option value="4:00PM">4:00PM</option>
                         </select>
-                    </EditForm>
+                   
                 </div>
             </div>
         </div>
@@ -78,7 +81,7 @@
 
                     <!-- Select Service -->
                     <label class="form-label fw-semibold">Select Service:</label>
-                    <select class="form-select form-select-lg mb-4" aria-label="Service select" @bind="selectedService">
+                        <select class="form-select form-select-lg mb-4" aria-label="Service select" @bind="selectedService">
                         <option value="0">Choose a service</option>
                         @foreach (var service in services)
                         {
@@ -130,8 +133,7 @@
     </div>
 </div>
 
-
-
+</EditForm>
 
 
 
@@ -155,24 +157,21 @@
     private int selectedDate { get; set; }
     private string selectedTime { get; set; }
     private string contactEmail { get; set; }
-    
-
-
-
-
 
     private string message;
 
     private async Task CheckAndBook()
     {
-     
+
+        if (string.IsNullOrEmpty(contactEmail))
+        {
+            message = "Please enter your email address.";
+            return;
+        }
+
+        bool isBookingSuccessful = await BookingProvider.SaveBookingAsync(contactEmail, newBooking.Timeslot, selectedBarber, selectedService);
+
     }
-
-
-
-
-
-
 
 }
 
