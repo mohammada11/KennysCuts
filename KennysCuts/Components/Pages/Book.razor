@@ -8,12 +8,12 @@
 @inject HaircutsProvider HaircutsProvider
 @inject TimeslotProvider TimeslotProvider
 @inject BarberProvider BarberProvider
-@inject BookingProvider BookingProvider
+
 
 <h3 class="text-center my-4">Book Now</h3>
 
 
-<EditForm Model="@newBooking" OnValidSubmit="CheckAndBook">
+<EditForm Model="@newBooking" OnValidSubmit="ValidateEmail">
     <DataAnnotationsValidator />
             <ValidationSummary />
 
@@ -120,8 +120,12 @@
                     <hr>
 
                     <!-- Contact Email -->
-                    <div class="mb-4">
+                        <div class="mb-4">
                         <InputText @bind-Value="contactEmail" class="form-control" placeholder="Enter Email" />
+                            @if (!isEmailValid)
+                            {
+                                <span class="text-danger">Email cannot be empty.</span>
+                            }
                     </div>
 
                     <!-- Submit Button -->
@@ -144,12 +148,20 @@
     private Booking newBooking = new Booking();
     private List<Services> services;
     private List<Barber> barbers;
+    private bool isEmailValid = true;
 
     protected override async Task OnInitializedAsync()
     {
         services = await HaircutsProvider.GetAllServicesAsync();
         barbers = await BarberProvider.GetAllBarberAsync();
 
+    }
+
+
+    private void ValidateEmail()
+    {
+        // Check if the email field is not empty or consists of only whitespace
+        isEmailValid = !string.IsNullOrWhiteSpace(contactEmail);
     }
 
     private string selectedBarber { get; set; }
@@ -163,15 +175,13 @@
     private async Task CheckAndBook()
     {
 
-        if (string.IsNullOrEmpty(contactEmail))
-        {
-            message = "Please enter your email address.";
-            return;
-        }
+       
 
-        bool isBookingSuccessful = await BookingProvider.SaveBookingAsync(contactEmail, newBooking.Timeslot, selectedBarber, selectedService);
+       
 
     }
+
+   
 
 }
 
