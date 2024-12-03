@@ -8,12 +8,13 @@
 @inject HaircutsProvider HaircutsProvider
 @inject TimeslotProvider TimeslotProvider
 @inject BarberProvider BarberProvider
+@inject BookingProvider BookingProvider
 
 
 <h3 class="text-center my-4">Book Now</h3>
 
 
-<EditForm Model="@newBooking" OnValidSubmit="ValidateEmail">
+<EditForm Model="@newBooking" OnValidSubmit="CreateBooking">
     <DataAnnotationsValidator />
             <ValidationSummary />
 
@@ -35,7 +36,7 @@
                         <!-- Date Selection -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Date:</label>
-                            <InputDate @bind-Value="newBooking.Timeslot" class="form-control form-control-lg" />
+                            <InputDate @bind-Value="selectedDate" class="form-control form-control-lg" />
                         </div>
 
                         <!-- Time Selection -->
@@ -106,7 +107,7 @@
                     <!-- Appointment Details -->
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">Selected Time:</span>
-                        <strong>@newBooking.Timeslot, @selectedTime</strong>
+                        <strong>@selectedDate, @selectedTime</strong>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">Selected Barber:</span>
@@ -129,7 +130,13 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">Book Appointment</button>
+                    <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">Book Appointment
+                            @if (isBooking)
+                            {
+                                <span class="spinner-border spinner-border-sm float-start" aria-hidden="true"></span>
+                            }
+                    </button>
+
                 </div>
             </div>
         </div>
@@ -145,43 +152,56 @@
 
 @code {
 
-    private Booking newBooking = new Booking();
-    private List<Services> services;
-    private List<Barber> barbers;
-    private bool isEmailValid = true;
+    @code {
+        private Booking newBooking = new Booking();
+        private List<Services> services;
+        private List<Barber> barbers;
 
-    protected override async Task OnInitializedAsync()
-    {
-        services = await HaircutsProvider.GetAllServicesAsync();
-        barbers = await BarberProvider.GetAllBarberAsync();
+        private User user;
 
-    }
+        private bool isEmailValid = true;
+        private bool isBooking = false;
 
+        protected override async Task OnInitializedAsync()
+        {
+            services = await HaircutsProvider.GetAllServicesAsync();
+            barbers = await BarberProvider.GetAllBarberAsync();
+        }
 
-    private void ValidateEmail()
-    {
-        // Check if the email field is not empty or consists of only whitespace
-        isEmailValid = !string.IsNullOrWhiteSpace(contactEmail);
-    }
+        private void ValidateEmail()
+        {
+            isEmailValid = !string.IsNullOrWhiteSpace(contactEmail);
+        }
 
-    private string selectedBarber { get; set; }
-    private string selectedService { get; set; }
-    private int selectedDate { get; set; }
-    private string selectedTime { get; set; }
-    private string contactEmail { get; set; }
-
-    private string message;
-
-    private async Task CheckAndBook()
-    {
+        private string selectedBarber { get; set; }
+        private string selectedService { get; set; }
+        private DateOnly selectedDate { get; set; }
+        private string selectedTime { get; set; }
+        private string contactEmail { get; set; }
 
        
 
-       
+        private async Task CreateBooking()
+        {
+            
+            // Proceed to create the booking
+            await StimulateBooking();
 
+            // Create the booking
+            await BookingProvider.CreateBooking(user, selectedBarber, selectedService, selectedDate);
+            NavigationManager.NavigateTo("/");
+        }
+
+        private async Task StimulateBooking()
+        {
+            isBooking = true;
+            StateHasChanged();
+            await Task.Delay(1500); // Simulate booking process
+            isBooking = false;
+            StateHasChanged();
+        }
     }
 
-   
 
 }
 

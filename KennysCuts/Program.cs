@@ -34,6 +34,7 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<HaircutsProvider>();
 builder.Services.AddScoped<TimeslotProvider>();
 builder.Services.AddScoped<BarberProvider>();
+builder.Services.AddScoped<BookingProvider>();
 
 
 

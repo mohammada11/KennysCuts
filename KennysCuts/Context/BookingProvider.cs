@@ -25,12 +25,12 @@ namespace KennysCuts.Context
                 .ToListAsync();
         }
 
-        
-        public async Task CreateBookingAsync(User user, string barberName, string serviceName, DateOnly Timeslot, string email)
+
+        public async Task CreateBooking(User user, string selectedBarber, string selectedService, DateOnly Timeslot)
         {
             // Fetch the selected barber and service from the database
-            var barber = await _context.Barber.FirstOrDefaultAsync(b => b.Name == barberName);
-            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == serviceName);
+            var barber = await _context.Barber.FirstOrDefaultAsync(b => b.Name == selectedBarber);
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == selectedService);
 
             if (barber == null || service == null)
             {
@@ -44,7 +44,6 @@ namespace KennysCuts.Context
                 Barber = barber,
                 Services = service,
                 Timeslot = Timeslot,
-                
             };
 
             // Add the booking to the database and save changes
