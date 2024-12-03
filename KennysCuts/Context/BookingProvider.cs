@@ -5,61 +5,53 @@ namespace KennysCuts.Context
 {
     public class BookingProvider
     {
-        private readonly DatabaseContext _databaseContext;
+        private readonly DatabaseContext _context;
 
-        public BookingProvider(DatabaseContext databaseContext)
+        // Constructor with dependency injection for database context
+        public BookingProvider(DatabaseContext context)
         {
-            _databaseContext = databaseContext;
+            _context = context;
         }
 
-        // Method to save the booking to the database
-        public async Task<bool> SaveBookingAsync(string email, DateOnly timeslot, string selectedBarber, string selectedService)
+        public async Task<List<Booking>?> GetBookingsAsync(User? user)
         {
-            try
+            if (user == null) return null;
+
+            // Query database for bookings linked to the user
+            return await _context.Bookings
+                .Where(booking => booking.User.UserName == user.UserName)
+                .Include(booking => booking.Barber)
+                .Include(booking => booking.Services)
+                .ToListAsync();
+        }
+
+        
+        public async Task CreateBookingAsync(User user, string barberName, string serviceName, DateOnly Timeslot, string email)
+        {
+            // Fetch the selected barber and service from the database
+            var barber = await _context.Barber.FirstOrDefaultAsync(b => b.Name == barberName);
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == serviceName);
+
+            if (barber == null || service == null)
             {
-                // Create a new booking object
-                var newBooking = new Booking
-                {
-                    
-                    Timeslot = timeslot,
-                };
-
-                // Find the Barber by the name
-                var barber = await _databaseContext.Barber
-                    .FirstOrDefaultAsync(b => b.Name == selectedBarber);
-
-                if (barber == null)
-                {
-                    // Barber not found
-                    return false;
-                }
-
-                // Find the Service by the name
-                var service = await _databaseContext.Services
-                    .FirstOrDefaultAsync(s => s.Name == selectedService);
-
-                if (service == null)
-                {
-                    // Service not found
-                    return false;
-                }
-
-                // Set the foreign key properties
-                newBooking.Barber = barber;
-                newBooking.Services = service;
-
-                // Save the booking to the database
-                _databaseContext.Bookings.Add(newBooking);
-                await _databaseContext.SaveChangesAsync();
-
-                return true;
+                throw new Exception("Invalid barber or service selected.");
             }
-            catch (Exception ex)
+
+            // Create a new Booking object
+            var booking = new Booking
             {
-                Console.WriteLine($"Error saving booking: {ex.Message}");
-                return false;
-            }
+                User = user,
+                Barber = barber,
+                Services = service,
+                Timeslot = Timeslot,
+                
+            };
+
+            // Add the booking to the database and save changes
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
         }
     }
-
 }
+
+
