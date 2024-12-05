@@ -123,11 +123,11 @@
                     <!-- Contact Email -->
                         <div class="mb-4">
                         <InputText @bind-Value="contactEmail" class="form-control" placeholder="Enter Email" />
-                            @if (!isEmailValid)
-                            {
-                                <span class="text-danger">Email cannot be empty.</span>
-                            }
-                    </div>
+                            @if (!string.IsNullOrEmpty(errorMessage))
+                             {
+                              <p style="color:red;">@errorMessage</p>
+                             }
+                        </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">Book Appointment
@@ -161,6 +161,7 @@
 
         private bool isEmailValid = true;
         private bool isBooking = false;
+        private string errorMessage;
 
         protected override async Task OnInitializedAsync()
         {
@@ -168,10 +169,20 @@
             barbers = await BarberProvider.GetAllBarberAsync();
         }
 
-        private void ValidateEmail()
+        private async Task ValidateEmail()
         {
-            isEmailValid = !string.IsNullOrWhiteSpace(contactEmail);
-        };
+            if (string.IsNullOrWhiteSpace(contactEmail))
+            {
+                isEmailValid = false;
+                errorMessage = "Email cannot be blank.";  // Set error message if email is empty
+            }
+            else
+            {
+                isEmailValid = true;
+                errorMessage = string.Empty;  // Clear error message if email is valid
+            }
+
+        }
 
         private string selectedBarber { get; set; }
         private string selectedService { get; set; }
@@ -183,6 +194,9 @@
 
         private async Task CreateBooking()
         {
+
+            await ValidateEmail();
+
             // Proceed to create the booking
             await StimulateBooking();
 
