@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KennysCuts.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241114091211_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20241205084253_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,11 +48,9 @@ namespace KennysCuts.Migrations
                     b.Property<int>("BarberId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SelectedBarberId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SelectedServiceId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ServicesId")
                         .HasColumnType("INTEGER");
@@ -66,10 +64,6 @@ namespace KennysCuts.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BarberId");
-
-                    b.HasIndex("SelectedBarberId");
-
-                    b.HasIndex("SelectedServiceId");
 
                     b.HasIndex("ServicesId");
 
@@ -311,18 +305,6 @@ namespace KennysCuts.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KennysCuts.Model.Barber", "SelectedBarber")
-                        .WithMany()
-                        .HasForeignKey("SelectedBarberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KennysCuts.Model.Services", "SelectedService")
-                        .WithMany()
-                        .HasForeignKey("SelectedServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("KennysCuts.Model.Services", "Services")
                         .WithMany()
                         .HasForeignKey("ServicesId")
@@ -334,10 +316,6 @@ namespace KennysCuts.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Barber");
-
-                    b.Navigation("SelectedBarber");
-
-                    b.Navigation("SelectedService");
 
                     b.Navigation("Services");
 

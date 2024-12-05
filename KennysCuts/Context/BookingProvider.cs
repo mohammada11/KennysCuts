@@ -26,7 +26,7 @@ namespace KennysCuts.Context
         }
 
 
-        public async Task CreateBooking(User user, string selectedBarber, string selectedService, DateOnly Timeslot)
+        public async Task CreateBooking(User user, string selectedBarber, string selectedService, DateOnly Timeslot, string contactEmail)
         {
             // Fetch the selected barber and service from the database
             var barber = await _context.Barber.FirstOrDefaultAsync(b => b.Name == selectedBarber);
@@ -44,6 +44,7 @@ namespace KennysCuts.Context
                 Barber = barber,
                 Services = service,
                 Timeslot = Timeslot,
+                Email = contactEmail,
             };
 
             // Add the booking to the database and save changes

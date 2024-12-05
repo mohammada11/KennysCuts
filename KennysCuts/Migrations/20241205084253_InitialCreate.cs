@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KennysCuts.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate2 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -198,8 +198,7 @@ namespace KennysCuts.Migrations
                     ServicesId = table.Column<int>(type: "INTEGER", nullable: false),
                     BarberId = table.Column<int>(type: "INTEGER", nullable: false),
                     Timeslot = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    SelectedBarberId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SelectedServiceId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -213,18 +212,6 @@ namespace KennysCuts.Migrations
                         name: "FK_Bookings_Barber_BarberId",
                         column: x => x.BarberId,
                         principalTable: "Barber",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Bookings_Barber_SelectedBarberId",
-                        column: x => x.SelectedBarberId,
-                        principalTable: "Barber",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Bookings_Services_SelectedServiceId",
-                        column: x => x.SelectedServiceId,
-                        principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -276,16 +263,6 @@ namespace KennysCuts.Migrations
                 name: "IX_Bookings_BarberId",
                 table: "Bookings",
                 column: "BarberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bookings_SelectedBarberId",
-                table: "Bookings",
-                column: "SelectedBarberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bookings_SelectedServiceId",
-                table: "Bookings",
-                column: "SelectedServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_ServicesId",
