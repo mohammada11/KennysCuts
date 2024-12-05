@@ -123,14 +123,17 @@
                     <!-- Contact Email -->
                         <div class="mb-4">
                         <InputText @bind-Value="contactEmail" class="form-control" placeholder="Enter Email" />
-                            @if (!string.IsNullOrEmpty(errorMessage))
+                            <!-- Display error message if the email is not valid -->
+                            @if (!isEmailValid)
                              {
+                              <!-- Display the error message in red if the email is invalid -->
                               <p style="color:red;">@errorMessage</p>
                              }
                         </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">Book Appointment
+                        <button type="submit" @onclick="ValidateEmail" class="btn btn-danger btn-lg w-100 fw-bold">
+                            Book Appointment
                             @if (isBooking)
                             {
                                 <span class="spinner-border spinner-border-sm float-start" aria-hidden="true"></span>
@@ -171,18 +174,29 @@
 
         private async Task ValidateEmail()
         {
+            // Check if the contact email is null, empty, or consists only of whitespace.
             if (string.IsNullOrWhiteSpace(contactEmail))
             {
-                isEmailValid = false;
-                errorMessage = "Email cannot be blank.";  // Set error message if email is empty
+                isEmailValid = false; // Mark email as invalid.
+                errorMessage = "Email cannot be blank."; // Set the error message.
+                return; // Exit the method.
+            }
+
+            // Validate if the email ends with "@gmail.com" or "@icloud.com".
+            else if (!contactEmail.EndsWith("@gmail.com") && !contactEmail.EndsWith("@icloud.com"))
+            {
+                isEmailValid = false; // Mark email as invalid.
+                errorMessage = "Email must be a Gmail or iCloud address."; // Sets the error message.
+                return; // Exit the method.
             }
             else
             {
-                isEmailValid = true;
-                errorMessage = string.Empty;  // Clear error message if email is valid
+                // If all checks pass, the email is considered valid.
+                isEmailValid = true; // Mark email as valid.
+                errorMessage = string.Empty; // Clear any previous error messages.
             }
-
         }
+
 
         private string selectedBarber { get; set; }
         private string selectedService { get; set; }
@@ -194,7 +208,7 @@
 
         private async Task CreateBooking()
         {
-
+            // Validates the user's email
             await ValidateEmail();
 
             // Proceed to create the booking
