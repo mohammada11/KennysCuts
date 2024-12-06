@@ -1,15 +1,19 @@
 ﻿@page "/book"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using KennysCuts.Model
 @using KennysCuts.Context
 @using System.ComponentModel.DataAnnotations
+@attribute [Authorize]
 @inject DatabaseContext DatabaseContext
 @inject NavigationManager NavigationManager
 @inject HaircutsProvider HaircutsProvider
 @inject TimeslotProvider TimeslotProvider
 @inject BarberProvider BarberProvider
 @inject BookingProvider BookingProvider
-
+@inject UserProvider UserProvider
+@inject AuthenticationStateProvider AutheticationStateProvider
 
 <h3 class="text-center my-4">Book Now</h3>
 
@@ -136,7 +140,7 @@
                             Book Appointment
                             @if (isBooking)
                             {
-                                <span class="spinner-border spinner-border-sm float-start" aria-hidden="true"></span>
+                                <span class="spinner-grow spinner-grow-sm text-light float-end" role="status" aria-hidden="true"></span>
                             }
                     </button>
 
@@ -170,7 +174,20 @@
         {
             services = await HaircutsProvider.GetAllServicesAsync();
             barbers = await BarberProvider.GetAllBarberAsync();
+
+            var authState = await AutheticationStateProvider.GetAuthenticationStateAsync();
+            var username = authState!.User!.Identity!.Name!;
+            user = UserProvider.GetUserByUsername(username);
         }
+
+
+        private string GetName(User user)
+        {
+            return $"{user.Name}";
+        }
+
+        
+
 
         private async Task ValidateEmail()
         {
@@ -216,7 +233,7 @@
 
             // Create the booking
             await BookingProvider.CreateBooking(user, selectedBarber, selectedService, selectedDate, contactEmail);
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/confirmation");
         }
 
         private async Task StimulateBooking()

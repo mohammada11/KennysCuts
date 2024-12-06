@@ -1,0 +1,39 @@
+﻿@page "/confirmation"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using KennysCuts.Model
+@using KennysCuts.Context
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+
+<!-- Container centered with a minimum vertical height -->
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 65vh;">
+    <!-- Dark-themed card with rounded corners, shadow, and specific width -->
+    <div class="card bg-white shadow-lg rounded-3 border-0" style="width: 400px;">
+        <div class="card-body p-4">
+            <!-- Centered title with extra bottom margin for spacing -->
+            <h4 class="card-title text-center mb-4">Booking Confirmation</h4>
+
+            <!-- Confirmation message -->
+            <p class="text-center mb-4 lead">
+                Thanks for booking an appointment at <strong>Kenny's Cuts!</strong><br />
+                We can't wait to see you soon.
+            </p>
+
+            <!-- Back to home button and link -->
+            <div class="d-flex gap-3 justify-content-center">
+                <button @onclick="GoToHome" class="btn btn-outline-dark w-50 rounded-pill fw-bold">Back To Home</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    public void GoToHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+
+}
