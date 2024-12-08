@@ -1,0 +1,108 @@
+﻿@page "/my-bookings"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using KennysCuts.Context
+@using KennysCuts.Model
+@inject UserProvider UserProvider
+@inject BookingProvider BookingProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
+
+
+<h3 class="text-center my-4"> My Bookings </h3>
+
+@if (bookings is null)
+{
+    <p>Loading...</p>
+}
+else if (!bookings.Any())
+{
+    <p>No orders found</p>
+}
+else
+{
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Bookings Section -->
+        <div class="col-lg-6 col-12">
+            <div class="card h-100 shadow-lg rounded-3 border-0">
+                <div class="card-body">
+                        <h4 class="card-title text-center text-dark fw-bold mb-4">All Bookings</h4>
+                    <div class="row">
+                        @foreach (var booking in bookings) // Loop through each booking in the bookings collection
+                        {
+                            <div class="col-12 mb-3">
+                                <div class="card shadow-sm rounded-3">
+                                    <div class="card-body">
+                                        <!-- Display the Booking ID -->
+                                        <h5 class="card-title fw-bold">Booking ID: @booking.Id</h5>
+
+                                        <!-- Display the booking date in "dd MMMM yyyy" format -->
+                                        <p class="card-text">Timeslot: @booking.Timeslot.ToString("dd MMMM yyyy")</p>
+
+                                        <!-- Display the selected barber for this booking -->
+                                        <p class="card-text">Barber: @booking.Barber</p>
+
+                                        <!-- Display the selected services for this booking -->
+                                        <p class="card-text">Service: @booking.Services</p>
+
+                                        <!-- Display the contact email associated with this booking -->
+                                        <p class="card-text">Contact Email: @booking.Email</p>
+
+                                        <!-- Show Details Button -->
+                                        <button class="btn btn-dark rounded-pill w-100 mt-3" @onclick="() => ShowDetails(booking)"> ✏️ </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Details Section -->
+        <div class="col-lg-6 col-12">
+            <div class="card h-100 shadow-lg rounded-3 border-0">
+                <div class="card-body">
+                        <h4 class="card-title text-center text-dark fw-bold mb-4">Booking Details</h4>
+                    <BookingDetails Booking="selectedBooking" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+   }
+}
+
+@code {
+
+    // Stores a list of bookings
+    private IEnumerable<Booking>? bookings;
+
+    // A private variable to store the selected booking order, can be null initially
+    private Booking? selectedBooking;
+
+    protected async override Task OnInitializedAsync() // Method invoked during component initialization
+    {
+        // Retrieve the current authentication state asynchronously
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        // Gets the username of the currently logged in user
+        var username = authstate.User!.Identity!.Name!;
+
+        // Gets the user details based on the username
+        var user = UserProvider.GetUserByUsername(username);
+
+        // Gets the list of bookings for the user 
+        bookings = await BookingProvider.GetBookingsAsync(user!);
+
+        // Set the first booking in the list as the initially selected order, if bookings exist
+        selectedBooking = bookings?.FirstOrDefault();
+    }
+
+    private void ShowDetails(Booking booking)
+    {
+        selectedBooking = booking;
+    }
+}
