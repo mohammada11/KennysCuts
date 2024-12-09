@@ -65,6 +65,7 @@ else
     </div>
 </div>
 
+
 }
 
 
@@ -75,6 +76,9 @@ else
 
     // A private variable to store the selected booking order, can be null initially
     private Booking? selectedBooking;
+
+
+    private bool isEditModalOpen = false;
 
     protected async override Task OnInitializedAsync() // Method invoked during component initialization
     {
@@ -98,4 +102,5 @@ else
     {
         selectedBooking = booking;
     }
+
 }
