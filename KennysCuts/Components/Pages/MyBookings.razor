@@ -1,4 +1,5 @@
 ﻿@page "/my-bookings"
+@using KennysCuts.Components.Shared
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using KennysCuts.Context
@@ -32,25 +33,17 @@ else
                         @foreach (var booking in bookings) // Loop through each booking in the bookings collection
                         {
                             <div class="col-12 mb-3">
-                                <div class="card shadow-sm rounded-3">
+                                  <div class="card shadow-sm rounded-3 justify-content-center">
                                     <div class="card-body">
                                         <!-- Display the Booking ID -->
-                                        <h5 class="card-title fw-bold">Booking ID: @booking.Id</h5>
-
-                                        <!-- Display the booking date in "dd MMMM yyyy" format -->
-                                        <p class="card-text">Timeslot: @booking.Timeslot.ToString("dd MMMM yyyy")</p>
-
-                                        <!-- Display the selected barber for this booking -->
-                                        <p class="card-text">Barber: @booking.Barber</p>
-
-                                        <!-- Display the selected services for this booking -->
-                                        <p class="card-text">Service: @booking.Services</p>
-
-                                        <!-- Display the contact email associated with this booking -->
-                                        <p class="card-text">Contact Email: @booking.Email</p>
-
+                                        <h5 class="card-title text-center fw-bold">Booking ID: @booking.Id</h5>
                                         <!-- Show Details Button -->
-                                        <button class="btn btn-dark rounded-pill w-100 mt-3" @onclick="() => ShowDetails(booking)"> ✏️ </button>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <button class="btn btn-danger rounded-pill w-auto mt-3 fw-bold"
+                                                        @onclick="() => ShowDetails(booking)">
+                                                    <i class="bi bi-info-circle me-2"></i> Show Details
+                                                </button>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -72,13 +65,13 @@ else
     </div>
 </div>
 
-   }
 }
+
 
 @code {
 
     // Stores a list of bookings
-    private IEnumerable<Booking>? bookings;
+    private List<Booking>? bookings;
 
     // A private variable to store the selected booking order, can be null initially
     private Booking? selectedBooking;

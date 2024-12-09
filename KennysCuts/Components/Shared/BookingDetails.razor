@@ -1,0 +1,43 @@
+﻿@using KennysCuts.Model
+
+@if(Booking == null)
+{
+    <p> Please choose a booking: </p>
+}
+else
+{
+   <div class="col-12 mb-3">
+    <div class="card shadow-lg rounded-3 border-0">
+        <div class="card-body">
+            <!-- Booking Date -->
+            <p class="card-text mb-2">
+                <i class="bi bi-calendar-date me-2"></i><strong>Timeslot:</strong> @Booking.Timeslot.ToString("dd MMMM yyyy")
+            </p>
+
+            <!-- Barber Name -->
+            <p class="card-text mb-2">
+                <i class="bi bi-person-fill me-2"></i><strong>Barber:</strong> @Booking.Barber.Name
+            </p>
+
+            <!-- Service Name -->
+            <p class="card-text mb-2">
+                <i class="bi bi-scissors me-2"></i><strong>Service:</strong> @Booking.Services.Name
+            </p>
+
+            <!-- Contact Email -->
+            <p class="card-text mb-2">
+                <i class="bi bi-envelope-fill me-2"></i><strong>Contact Email:</strong> @Booking.Email
+            </p>
+        </div>
+    </div>
+</div>
+
+}
+
+
+
+@code {
+
+    [Parameter]
+     public Booking Booking { get; set; }
+}
