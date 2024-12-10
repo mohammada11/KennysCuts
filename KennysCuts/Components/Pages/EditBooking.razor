@@ -1,0 +1,112 @@
+﻿@page "/edit-booking"
+@using KennysCuts.Context
+@using KennysCuts.Model
+@using KennysCuts.Components.Shared
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@inject BookingProvider BookingProvider
+@inject UserProvider UserProvider
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<PageTitle>Edit Booking</PageTitle>
+
+<h3 class="text-center my-4"> Edit Bookings </h3>
+
+@if (booking is null)
+{
+    <p>Loading...</p>
+}
+else if (!booking.Any())
+{
+    <p>Please create a booking</p>
+}
+else
+{
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Bookings Section -->
+        <div class="col-lg-6 col-12">
+            <div class="card h-100 shadow-lg rounded-3 border-0">
+                <div class="card-body">
+                        <h4 class="card-title text-center text-dark fw-bold mb-4">All Bookings</h4>
+                    <div class="row">
+                        @foreach (var booking in booking) // Loop through each booking in the bookings collection
+                        {
+                                <div class="col-12 mb-3">
+                                    <div class="card shadow-sm rounded-3 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <!-- Display the Booking ID -->
+                                            <h5 class="card-title fw-bold">Booking ID: @booking.Id</h5>
+
+                                            <!-- Show Details Button -->
+                                            <button class="btn btn-danger rounded-pill w-auto mt-3 fw-bold" @onclick="() => ShowDetails(booking)">
+                                                Show Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="col-lg-6 col-12">
+                <div class="card h-100 shadow-lg rounded-3 border-0">
+                    <div class="card-body">
+                        <BookingForm Booking="selectedBooking" />
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+}
+
+<div class="d-flex justify-content-center align-items-center">
+<button class="btn btn-outline-dark w-auto mt-3 fw-bold ms-2" @onclick="() => GoToBookings()">
+    Return to Bookings
+</button>
+</div> 
+
+
+@code 
+
+{
+
+    private List<Booking>? booking;
+    private int? selectedBookingId;
+    private Booking? selectedBooking;
+
+    protected async override Task OnInitializedAsync()
+    {
+        // Retrieve the current authentication state asynchronously
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        // Gets the username of the currently logged in user
+        var username = authstate.User!.Identity!.Name!;
+
+        // Gets the user details based on the username
+        var user = UserProvider.GetUserByUsername(username);
+
+        // Gets the list of bookings for the user
+        booking = await BookingProvider.GetBookingsAsync(user!);
+
+
+        selectedBooking = booking?.FirstOrDefault();
+        selectedBookingId = selectedBooking?.Id;
+    }
+
+    private void ShowDetails(Booking booking)
+    {
+        selectedBooking = booking;
+    }
+
+    private void GoToBookings()
+    {
+        NavigationManager.NavigateTo("/my-bookings");
+    }
+
+}

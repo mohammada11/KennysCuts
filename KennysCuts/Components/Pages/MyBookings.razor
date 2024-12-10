@@ -6,6 +6,7 @@
 @using KennysCuts.Model
 @inject UserProvider UserProvider
 @inject BookingProvider BookingProvider
+@inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize]
 
@@ -39,16 +40,14 @@ else
                                         <h5 class="card-title text-center fw-bold">Booking ID: @booking.Id</h5>
                                         <!-- Show Details Button -->
                                             <div class="d-flex justify-content-center align-items-center">
-                                                <button class="btn btn-danger rounded-pill w-auto mt-3 fw-bold"
-                                                        @onclick="() => ShowDetails(booking)">
-                                                    <i class="bi bi-info-circle me-2"></i> Show Details
+                                                <button class="btn btn-danger rounded-pill w-auto mt-3 fw-bold" @onclick="() => ShowDetails(booking)">
+                                                 Show Details
                                                 </button>
                                                 <!-- Edit Button -->
-                                                <button class="btn btn-warning rounded-pill w-auto mt-3 fw-bold ms-2"
-                                                        @onclick="() => EditBooking(booking)">
-                                                    <i class="bi bi-pencil me-2"></i> Edit
+                                                <button class="btn btn-danger rounded-pill w-auto mt-3 fw-bold ms-2" @onclick="() => GoToEdit()">
+                                                  Edit Booking
                                                 </button>
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -63,14 +62,7 @@ else
             <div class="card h-100 shadow-lg rounded-3 border-0">
                 <div class="card-body">
                     <h4 class="card-title text-center text-dark fw-bold mb-4">Booking Details</h4>
-                    @if (isEditing)
-                        {
-                            <EditBooking Booking="selectedBooking" OnSubmit="HandleBookingEdit" />
-                        }
-                        else
-                        {
-                            <BookingDetails Booking="selectedBooking" />
-                        }
+                        <BookingDetails Booking="selectedBooking" />
                 </div>
             </div>
         </div>
@@ -109,6 +101,11 @@ else
 
         // Set the first booking in the list as the initially selected order, if bookings exist
         selectedBooking = bookings?.FirstOrDefault();
+    }
+
+    private void GoToEdit()
+    {
+        NavigationManager.NavigateTo("/edit-booking");
     }
 
     private void ShowDetails(Booking booking)
