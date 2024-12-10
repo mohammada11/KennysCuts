@@ -1,0 +1,74 @@
+﻿@page "/edit-booking"
+@using KennysCuts.Model
+@using KennysCuts.Context
+@inject BookingProvider BookingProvider
+@inject NavigationManager NavigationManager
+
+
+
+<PageTitle>Edit Booking</PageTitle>
+
+<h3>Edit Booking</h3>
+
+
+
+
+
+
+@code {
+
+    [Parameter] 
+    public Booking? Booking { get; set; }
+
+    private BookingModel Model { get; set; }
+
+    private async Task HandleSubmit()
+    {
+        var booking = Booking ?? new Booking();
+
+        booking.Services = Model.Services;
+        booking.Timeslot = Model.Timeslot;
+        booking.Barber = Model.Barber;
+        booking.Email = Model.Email;
+
+       await BookingProvider.UpdateBookingAsync(booking);
+        
+
+        NavigationManager.NavigateTo("/");
+    }
+
+    protected override void OnParametersSet()
+    {
+        Model = Booking is null ? new BookingModel() : new BookingModel(Booking);
+        base.OnParametersSet();
+    }
+
+
+    private sealed class BookingModel
+    {
+
+        public DateOnly Timeslot { get; set; } = DateOnly.MinValue;  
+        public Services Services { get; set; } = new Services();    
+        public Barber Barber { get; set; } = new Barber();          
+        public string Email { get; set; } = string.Empty;
+   
+
+        public BookingModel()
+        {
+
+        }
+
+        public BookingModel(Booking booking)
+        {
+
+            Services = booking.Services;
+            Timeslot = booking.Timeslot;
+            Barber = booking.Barber;
+            Email = booking.Email;
+
+        }
+
+    }
+}
+
+

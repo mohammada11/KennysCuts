@@ -43,6 +43,11 @@ else
                                                         @onclick="() => ShowDetails(booking)">
                                                     <i class="bi bi-info-circle me-2"></i> Show Details
                                                 </button>
+                                                <!-- Edit Button -->
+                                                <button class="btn btn-warning rounded-pill w-auto mt-3 fw-bold ms-2"
+                                                        @onclick="() => EditBooking(booking)">
+                                                    <i class="bi bi-pencil me-2"></i> Edit
+                                                </button>
                                             </div>
                                     </div>
                                 </div>
@@ -57,13 +62,22 @@ else
         <div class="col-lg-6 col-12">
             <div class="card h-100 shadow-lg rounded-3 border-0">
                 <div class="card-body">
-                        <h4 class="card-title text-center text-dark fw-bold mb-4">Booking Details</h4>
-                    <BookingDetails Booking="selectedBooking" />
+                    <h4 class="card-title text-center text-dark fw-bold mb-4">Booking Details</h4>
+                    @if (isEditing)
+                        {
+                            <EditBooking Booking="selectedBooking" OnSubmit="HandleBookingEdit" />
+                        }
+                        else
+                        {
+                            <BookingDetails Booking="selectedBooking" />
+                        }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 
 }
@@ -77,8 +91,7 @@ else
     // A private variable to store the selected booking order, can be null initially
     private Booking? selectedBooking;
 
-
-    private bool isEditModalOpen = false;
+    private bool isEditing = false;
 
     protected async override Task OnInitializedAsync() // Method invoked during component initialization
     {
@@ -101,6 +114,30 @@ else
     private void ShowDetails(Booking booking)
     {
         selectedBooking = booking;
+    }
+
+    private void EditBooking(Booking booking)
+    {
+        selectedBooking = booking;
+        isEditing = true; // Enable editing mode
+    }
+
+    private async Task HandleBookingEdit(Booking updatedBooking)
+    {
+        // Call the BookingProvider to update the booking
+        await BookingProvider.UpdateBookingAsync(updatedBooking);
+
+        // After update, set the selected booking to the updated booking
+        selectedBooking = updatedBooking;
+
+        // Set editing mode to false after saving
+        isEditing = false;
+
+        // Optionally, refresh the list of bookings (if necessary)
+        var authstate = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var username = authstate.User!.Identity!.Name!;
+        var user = UserProvider.GetUserByUsername(username);
+        bookings = await BookingProvider.GetBookingsAsync(user!);
     }
 
 }

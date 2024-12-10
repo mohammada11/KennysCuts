@@ -52,36 +52,9 @@ namespace KennysCuts.Context
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateBookingAsync(int bookingId, string selectedBarber, string selectedService, DateOnly timeslot, string contactEmail)
+        public async Task UpdateBookingAsync(Booking Booking)
         {
-            // Fetch the booking by its ID
-            var booking = await _context.Bookings
-                .Include(b => b.Barber)
-                .Include(b => b.Services)
-                .FirstOrDefaultAsync(b => b.Id == bookingId);
-
-            if (booking == null)
-            {
-                throw new Exception("Booking not found.");
-            }
-
-            // Fetch the updated barber and service from the database
-            var barber = await _context.Barber.FirstOrDefaultAsync(b => b.Name == selectedBarber);
-            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == selectedService);
-
-            if (barber == null || service == null)
-            {
-                throw new Exception("Invalid barber or service selected.");
-            }
-
-            // Update the booking details
-            booking.Barber = barber;
-            booking.Services = service;
-            booking.Timeslot = timeslot;
-            booking.Email = contactEmail;
-
-            // Save changes to the database
-            _context.Bookings.Update(booking);
+            _context.Bookings.Update(Booking);
             await _context.SaveChangesAsync();
         }
     }
