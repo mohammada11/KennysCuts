@@ -197,7 +197,8 @@ namespace KennysCuts.Migrations
                     UserId = table.Column<string>(type: "TEXT", nullable: true),
                     ServicesId = table.Column<int>(type: "INTEGER", nullable: false),
                     BarberId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Timeslot = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    Timeslot = table.Column<string>(type: "TEXT", nullable: false),
+                    Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

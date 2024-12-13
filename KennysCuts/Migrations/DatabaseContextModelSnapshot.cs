@@ -45,6 +45,9 @@ namespace KennysCuts.Migrations
                     b.Property<int>("BarberId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -52,7 +55,8 @@ namespace KennysCuts.Migrations
                     b.Property<int>("ServicesId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("Timeslot")
+                    b.Property<string>("Timeslot")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")

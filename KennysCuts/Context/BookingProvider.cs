@@ -26,7 +26,7 @@ namespace KennysCuts.Context
         }
 
 
-        public async Task CreateBooking(User user, string selectedBarber, string selectedService, DateOnly Timeslot, string contactEmail)
+        public async Task CreateBooking(User user, string selectedBarber, string selectedService, string Timeslot, DateOnly Date, string contactEmail)
         {
             // Fetch the selected barber and service from the database
             var barber = await _context.Barber.FirstOrDefaultAsync(b => b.Name == selectedBarber);
@@ -44,6 +44,7 @@ namespace KennysCuts.Context
                 Barber = barber,
                 Services = service,
                 Timeslot = Timeslot,
+                Date = Date,
                 Email = contactEmail,
             };
 
@@ -52,11 +53,48 @@ namespace KennysCuts.Context
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateBookingAsync(Booking Booking)
+        public async Task UpdateBookingAsync(Booking booking)
         {
-            _context.Bookings.Update(Booking);
-            await _context.SaveChangesAsync();
+            
+            var existingBooking = await _context.Bookings
+                .FirstOrDefaultAsync(b => b.Id == booking.Id);
+
+
+            if (existingBooking != null)
+            {
+
+                existingBooking.Services = booking.Services;
+                existingBooking.Barber = booking.Barber;
+                existingBooking.Timeslot = booking.Timeslot;
+                existingBooking.Email = booking.Email;
+
+                _context.Bookings.Update(booking);
+                await _context.SaveChangesAsync();
+            }
         }
+
+        
+        public async Task<Services> GetServiceByNameOrIdAsync(string serviceNameOrId)
+        {
+            if (int.TryParse(serviceNameOrId, out var serviceId))  
+            {
+                return await _context.Services.FirstOrDefaultAsync(s => s.Id == serviceId);
+            }
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name== serviceNameOrId);
+            return service;
+        }
+
+       
+        public async Task<Barber> GetBarberByNameOrIdAsync(string barberNameOrId)
+        {
+            if (int.TryParse(barberNameOrId, out var barberId))  // Try to parse the string to an ID
+            {
+                return await _context.Barber.FirstOrDefaultAsync(b => b.Id == barberId);
+            }
+            return await _context.Barber.FirstOrDefaultAsync(b => b.Name==barberNameOrId);
+        }
+
+
     }
 }
 

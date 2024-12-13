@@ -11,7 +11,12 @@ else
         <div class="card-body">
             <!-- Booking Date -->
             <p class="card-text mb-2">
-                <i class="bi bi-calendar-date me-2"></i><strong>Timeslot:</strong> @Booking.Timeslot.ToString("dd MMMM yyyy")
+                <i class="bi bi-calendar-date me-2"></i><strong>Date:</strong> @Booking.Date.ToString("dd MMMM yyyy")
+            </p>
+
+           <!-- Barber Name -->
+            <p class="card-text mb-2">
+              <i class="bi bi-person-fill me-2"></i><strong>Time:</strong> @Booking.Timeslot
             </p>
 
             <!-- Barber Name -->

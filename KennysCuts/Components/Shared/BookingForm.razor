@@ -1,13 +1,10 @@
 ﻿@using KennysCuts.Model
 @using KennysCuts.Context
+@using System.ComponentModel.DataAnnotations
 @inject BookingProvider BookingProvider
 @inject NavigationManager NavigationManager
 
-
-
-
-
-<EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+<EditForm Model="@Model" OnValidSubmit="@EditBooking">
     <DataAnnotationsValidator />
     <div class="container py-5">
         <div class="row g-4">
@@ -16,10 +13,29 @@
                     <div class="card-body bg-light d-flex flex-column">
                         <h4 class="card-title text-center text-dark fw-bold mb-4">Booking Details</h4>
 
+                        <!-- Date Field -->
+                        <div class="form-group mb-3">
+                            <!-- Label for the timeslot input -->
+                            <label for="timeslot" class="form-label">Date</label>
+
+                            <!-- Input field for selecting a timeslot, bound to the 'Timeslot' property of the model -->
+                            <InputDate id="timeslot" class="form-control" @bind-Value="@Model.Date" placeholder="Enter new date" />
+
+                            <!-- Displays an error message if the 'Timeslot' validation fails -->
+                            <div class="small">
+                                <ValidationMessage For="@(() => Model.Date)" />
+                            </div>
+                        </div>
+
                         <!-- Timeslot Field -->
                         <div class="form-group mb-3">
-                            <label for="timeslot" class="form-label">Timeslot</label>
-                            <InputDate id="timeslot" class="form-control" @bind-Value="@Model.Timeslot" placeholder="Enter new time" />
+                            <!-- Label for the timeslot input -->
+                            <label for="timeslot" class="form-label">Time</label>
+
+                            <!-- Input field for selecting a timeslot, bound to the 'Timeslot' property of the model -->
+                            <InputText id="timeslot" class="form-control" @bind-Value="@Model.Timeslot" placeholder="Enter new time" />
+
+                            <!-- Displays an error message if the 'Timeslot' validation fails -->
                             <div class="small">
                                 <ValidationMessage For="@(() => Model.Timeslot)" />
                             </div>
@@ -27,8 +43,13 @@
 
                         <!-- Barber Field -->
                         <div class="form-group mb-3">
+                            <!-- Label for the barber input -->
                             <label for="barber" class="form-label">Barber</label>
+
+                            <!-- Input field for entering the barber's name or ID, bound to the 'BarberNameOrId' property of the model -->
                             <InputText id="barber" class="form-control" @bind-Value="@Model.BarberNameOrId" placeholder="Enter barber" />
+
+                            <!-- Validation message displayed for the 'BarberNameOrId' field if validation fails -->
                             <div class="small">
                                 <ValidationMessage For="@(() => Model.BarberNameOrId)" />
                             </div>
@@ -36,8 +57,13 @@
 
                         <!-- Service Field -->
                         <div class="form-group mb-3">
+                            <!-- Label for the service input -->
                             <label for="services" class="form-label">Service</label>
+
+                            <!-- Input field for entering the service name or ID, bound to the 'ServiceNameOrId' property of the model -->
                             <InputText id="services" class="form-control" @bind-Value="@Model.ServiceNameOrId" placeholder="Enter service" />
+
+                            <!-- Validation message displayed for the 'ServiceNameOrId' field if validation fails -->
                             <div class="small">
                                 <ValidationMessage For="@(() => Model.ServiceNameOrId)" />
                             </div>
@@ -45,8 +71,13 @@
 
                         <!-- Email Field -->
                         <div class="form-group mb-3">
+                            <!-- Label for the email input -->
                             <label for="email" class="form-label">Email</label>
+
+                            <!-- Input field for entering the user's email, bound to the 'Email' property of the model -->
                             <InputText id="email" class="form-control" @bind-Value="@Model.Email" placeholder="Enter email" />
+
+                            <!-- Validation message displayed for the 'Email' field if validation fails -->
                             <div class="small">
                                 <ValidationMessage For="@(() => Model.Email)" />
                             </div>
@@ -54,18 +85,17 @@
 
                         <!-- Action Buttons -->
                         <div class="d-flex justify-content-between mt-4">
-                            <button class="btn btn-danger w-48" type="submit">Save</button>
-                            <button class="btn btn-dark w-48" type="button">Cancel</button>
+                            <!-- Submit button to either cancel or save changes, based on whether 'Booking' is null -->
+                            <button class="btn btn-dark w-48" type="submit">
+                                @(Booking == null ? "Cancel Changes" : "Save Changes") <!-- Conditionally renders button text -->
+                            </button>
                         </div>
-                    </div>
+
+                   </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
 </EditForm>
 
 @code {
@@ -76,42 +106,56 @@
 
     protected override void OnParametersSet()
     {
-        Model = Booking is null ? new BookingModel() : new BookingModel(Booking);
+        if (Booking != null)
+        {
+            // Populate the model with existing booking details if booking is provided
+            Model = new BookingModel(Booking);
+        }
         base.OnParametersSet();
     }
 
-    private async Task HandleSubmit()
+    private async Task EditBooking()
     {
+        // Use existing booking or create a new one
         var booking = Booking ?? new Booking();
 
-        booking.User = new User { Name = Model.UserNameOrId }; // Or use an ID lookup
-        booking.Services = new Services { Name = Model.ServiceNameOrId }; // Or use an ID lookup
-        booking.Barber = new Barber { Name = Model.BarberNameOrId }; // Or use an ID lookup
+        // Get service by name or ID
+        var service = await BookingProvider.GetServiceByNameOrIdAsync(Model.ServiceNameOrId);
+
+        // Get barber by name or ID
+        var barber = await BookingProvider.GetBarberByNameOrIdAsync(Model.BarberNameOrId);
+
+        // Assign values to the booking
+        booking.Services = service; 
+        booking.Barber = barber;
+        booking.Date = Model.Date;
         booking.Timeslot = Model.Timeslot;
         booking.Email = Model.Email;
 
+        // Update the booking
+        await BookingProvider.UpdateBookingAsync(booking);
 
-      await BookingProvider.UpdateBookingAsync(booking);
-        
+        // Redirect to the "my bookings" page
+        NavigationManager.NavigateTo("/my-bookings");
 
-        NavigationManager.NavigateTo("/");
     }
 
     private sealed class BookingModel
     {
-    
-        public string UserNameOrId { get; set; } = ""; // For binding User's Name or ID
 
-        
+        [Required]
         public string ServiceNameOrId { get; set; } = ""; // For binding Service's Name or ID
 
-       
+        [Required]
         public string BarberNameOrId { get; set; } = ""; // For binding Barber's Name or ID
 
-       
-        public DateOnly Timeslot { get; set; }
+        [Required]
+        public DateOnly Date { get; set; }
 
-        
+        [Required]
+        public string Timeslot { get; set; } = "";
+
+        [Required]
         public string Email { get; set; } = "";
 
         public BookingModel()
@@ -120,10 +164,19 @@
 
         public BookingModel(Booking booking)
         {
-            UserNameOrId = booking.User.Name; // Or booking.User.Id
-            ServiceNameOrId = booking.Services.Name; // Or booking.Services.Id
-            BarberNameOrId = booking.Barber.Name; // Or booking.Barber.Id
+            // Get the service name from the booking
+            ServiceNameOrId = booking.Services.Name;
+
+            // Get the barber's name from the booking
+            BarberNameOrId = booking.Barber.Name;
+
+            // Get the booking date
+            Date = booking.Date;
+
+            // Get the booking timeslot
             Timeslot = booking.Timeslot;
+
+            // Get the customer's email
             Email = booking.Email;
         }
     }

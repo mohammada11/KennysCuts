@@ -39,15 +39,13 @@ else
                                         <div class="card-body text-center">
                                             <!-- Display the Booking ID -->
                                             <h5 class="card-title fw-bold">Booking ID: @booking.Id</h5>
-
                                             <!-- Show Details Button -->
                                             <button class="btn btn-danger rounded-pill w-auto mt-3 fw-bold" @onclick="() => ShowDetails(booking)">
-                                                Show Details
+                                               Show Details
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-
                         }
                     </div>
                 </div>
@@ -59,8 +57,9 @@ else
                     <div class="card-body">
                         <BookingForm Booking="selectedBooking" />
                     </div>
-                </div>
+                </div> 
             </div>
+
         </div>
    </div>
 }
@@ -76,7 +75,7 @@ else
 
 {
 
-    private List<Booking>? booking;
+    private IEnumerable<Booking>? booking;
     private int? selectedBookingId;
     private Booking? selectedBooking;
 
@@ -103,6 +102,14 @@ else
     {
         selectedBooking = booking;
     }
+
+    private void OnCheeseSelected(ChangeEventArgs e)
+    {
+        if (e.Value is null) return;
+        selectedBookingId = int.Parse(e.Value.ToString()!);
+        selectedBooking = booking?.FirstOrDefault(cheese => cheese.Id == selectedBookingId);
+    }
+
 
     private void GoToBookings()
     {

@@ -180,14 +180,10 @@
             user = UserProvider.GetUserByUsername(username);
         }
 
-
         private string GetName(User user)
         {
             return $"{user.Name}";
         }
-
-        
-
 
         private async Task ValidateEmail()
         {
@@ -232,7 +228,7 @@
             await StimulateBooking();
 
             // Create the booking
-            await BookingProvider.CreateBooking(user, selectedBarber, selectedService, selectedDate, contactEmail);
+            await BookingProvider.CreateBooking(user, selectedBarber, selectedService, selectedTime, selectedDate, contactEmail);
             NavigationManager.NavigateTo("/confirmation");
         }
 
