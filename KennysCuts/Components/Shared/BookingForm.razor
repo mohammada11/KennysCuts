@@ -3,6 +3,8 @@
 @using System.ComponentModel.DataAnnotations
 @inject BookingProvider BookingProvider
 @inject NavigationManager NavigationManager
+@inject HaircutsProvider HaircutProvider
+@inject BarberProvider BarberProvider
 
 <EditForm Model="@Model" OnValidSubmit="@EditBooking">
     <DataAnnotationsValidator />
@@ -29,13 +31,22 @@
 
                         <!-- Timeslot Field -->
                         <div class="form-group mb-3">
-                            <!-- Label for the timeslot input -->
+                            <!-- Label for the timeslot dropdown -->
                             <label for="timeslot" class="form-label">Time</label>
+                            <InputSelect id="timeslot" class="form-control" @bind-Value="@Model.Timeslot">
+                                <option value="">Select a timeslot</option>
+                                <!-- Dynamically populate the dropdown with available timeslots if they exist -->
+                                @if (AvailableTimeslots != null)
+                                {
+                                    foreach (var timeslot in AvailableTimeslots)
+                                    {
+                                        <!-- Create an option for each available timeslot -->
+                                        <option value="@timeslot">@timeslot</option>
+                                    }
+                                }
+                            </InputSelect>
 
-                            <!-- Input field for selecting a timeslot, bound to the 'Timeslot' property of the model -->
-                            <InputText id="timeslot" class="form-control" @bind-Value="@Model.Timeslot" placeholder="Enter new time" />
-
-                            <!-- Displays an error message if the 'Timeslot' validation fails -->
+                            <!-- Display validation message for the Timeslot field if there are errors -->
                             <div class="small">
                                 <ValidationMessage For="@(() => Model.Timeslot)" />
                             </div>
@@ -43,13 +54,17 @@
 
                         <!-- Barber Field -->
                         <div class="form-group mb-3">
-                            <!-- Label for the barber input -->
                             <label for="barber" class="form-label">Barber</label>
-
-                            <!-- Input field for entering the barber's name or ID, bound to the 'BarberNameOrId' property of the model -->
-                            <InputText id="barber" class="form-control" @bind-Value="@Model.BarberNameOrId" placeholder="Enter barber" />
-
-                            <!-- Validation message displayed for the 'BarberNameOrId' field if validation fails -->
+                            <InputSelect id="barber" class="form-control" @bind-Value="@Model.BarberNameOrId">
+                                <option value="">Select a barber</option>
+                                @if (AvailableBarbers != null)
+                                {
+                                    foreach (var barber in AvailableBarbers)
+                                    {
+                                        <option value="@barber.Name">@barber.Name</option>
+                                    }
+                                }
+                            </InputSelect>
                             <div class="small">
                                 <ValidationMessage For="@(() => Model.BarberNameOrId)" />
                             </div>
@@ -57,13 +72,17 @@
 
                         <!-- Service Field -->
                         <div class="form-group mb-3">
-                            <!-- Label for the service input -->
-                            <label for="services" class="form-label">Service</label>
-
-                            <!-- Input field for entering the service name or ID, bound to the 'ServiceNameOrId' property of the model -->
-                            <InputText id="services" class="form-control" @bind-Value="@Model.ServiceNameOrId" placeholder="Enter service" />
-
-                            <!-- Validation message displayed for the 'ServiceNameOrId' field if validation fails -->
+                            <label for="service" class="form-label">Service</label>
+                            <InputSelect id="service" class="form-control" @bind-Value="@Model.ServiceNameOrId">
+                                <option value="">Select a service</option>
+                                @if (AvailableServices != null)
+                                {
+                                    foreach (var service in AvailableServices)
+                                    {
+                                        <option value="@service.Name">@service.Name</option>
+                                    }
+                                }
+                            </InputSelect>
                             <div class="small">
                                 <ValidationMessage For="@(() => Model.ServiceNameOrId)" />
                             </div>
@@ -87,7 +106,7 @@
                         <div class="d-flex justify-content-between mt-4">
                             <!-- Submit button to either cancel or save changes, based on whether 'Booking' is null -->
                             <button class="btn btn-dark w-48" type="submit">
-                                @(Booking == null ? "Cancel Changes" : "Save Changes") <!-- Conditionally renders button text -->
+                                @(Booking == null ? "Cancel Changes" : "Save Changes") 
                             </button>
                         </div>
 
@@ -103,6 +122,18 @@
     public Booking? Booking { get; set; }
 
     private BookingModel Model { get; set; }
+
+    private List<string>? AvailableTimeslots { get; set; }
+    private List<Services>? AvailableServices { get; set; }
+    private List<Barber>? AvailableBarbers { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load available options
+        AvailableTimeslots = await BookingProvider.GetAvailableTimeslotsAsync();
+        AvailableServices = await HaircutProvider.GetAllServicesAsync();
+        AvailableBarbers = await BarberProvider.GetAllBarberAsync();
+    }
 
     protected override void OnParametersSet()
     {
@@ -143,19 +174,19 @@
     private sealed class BookingModel
     {
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your desired service")]
         public string ServiceNameOrId { get; set; } = ""; // For binding Service's Name or ID
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your desired barber")]
         public string BarberNameOrId { get; set; } = ""; // For binding Barber's Name or ID
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your desired date")]
         public DateOnly Date { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your desired time")]
         public string Timeslot { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Please enter your contact email")]
         public string Email { get; set; } = "";
 
         public BookingModel()

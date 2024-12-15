@@ -172,13 +172,22 @@
 
         protected override async Task OnInitializedAsync()
         {
+            // Gets all available haircut services.
             services = await HaircutsProvider.GetAllServicesAsync();
+
+            // Gets all the available barbers asynchronously.
             barbers = await BarberProvider.GetAllBarberAsync();
 
+            // Retrieve the current authentication state asynchronously.
             var authState = await AutheticationStateProvider.GetAuthenticationStateAsync();
+
+            // Gets the username of the current user.
             var username = authState!.User!.Identity!.Name!;
+
+            // Gets the user details based on the username.
             user = UserProvider.GetUserByUsername(username);
         }
+
 
         private string GetName(User user)
         {

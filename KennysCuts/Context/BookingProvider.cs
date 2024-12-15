@@ -73,18 +73,47 @@ namespace KennysCuts.Context
             }
         }
 
-        
+        // Get available timeslots for bookings
+        public async Task<List<string>> GetAvailableTimeslotsAsync()
+        {
+            // Example: Returning a list of predefined timeslots
+            return await Task.FromResult(new List<string>
+            {
+                "09:00 AM",
+                "09:30 AM",
+                "10:00 AM",
+                "10:30 AM",
+                "11:00 AM",
+                "11:30 AM",
+                "12:00 PM",
+                "12:30 PM",
+                "01:00 PM",
+                "01:30 PM",
+                "02:00 PM",
+                "02:30 PM",
+                "03:00 PM",
+                "03:30 PM",
+                "04:00 PM",
+            });
+        }
+
+        // Gets a service by its name or ID.
         public async Task<Services> GetServiceByNameOrIdAsync(string serviceNameOrId)
         {
-            if (int.TryParse(serviceNameOrId, out var serviceId))  
+            // Check if the input can be converted to an integer (treat it as an ID).
+            if (int.TryParse(serviceNameOrId, out var serviceId))
             {
+                // If it is an ID, find the service with the matching ID in the database.
                 return await _context.Services.FirstOrDefaultAsync(s => s.Id == serviceId);
             }
-            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name== serviceNameOrId);
+
+            // Return service matching the ID.
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Name == serviceNameOrId);
             return service;
         }
 
-       
+
+
         public async Task<Barber> GetBarberByNameOrIdAsync(string barberNameOrId)
         {
             if (int.TryParse(barberNameOrId, out var barberId))  // Try to parse the string to an ID
